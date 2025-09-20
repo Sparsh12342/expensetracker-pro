@@ -1,0 +1,124 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: #87CEEB;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+a {
+  font-weight: 500;
+  color: #87CEEB;
+  text-decoration: inherit;
+}
+a:hover {w
+  color: #B0E0E6;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-attachment: fixed;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+  animation: backgroundShift 20s ease-in-out infinite;
+}
+
+@keyframes backgroundShift {
+  0%, 100% { 
+    transform: translateX(0) translateY(0) scale(1);
+    opacity: 1;
+  }
+  25% { 
+    transform: translateX(-10px) translateY(-5px) scale(1.02);
+    opacity: 0.8;
+  }
+  50% { 
+    transform: translateX(5px) translateY(-10px) scale(0.98);
+    opacity: 0.9;
+  }
+  75% { 
+    transform: translateX(-5px) translateY(5px) scale(1.01);
+    opacity: 0.85;
+  }
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #4682B4;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background-attachment: fixed;
+  }
+  
+  body {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background-attachment: fixed;
+  }
+  
+  body::before {
+    background: 
+      radial-gradient(circle at 20% 80%, rgba(240, 147, 251, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(245, 87, 108, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba(255, 200, 220, 0.2) 0%, transparent 50%);
+    animation: backgroundShift 20s ease-in-out infinite;
+  }
+  
+  a:hover {
+    color: #87CEEB;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}

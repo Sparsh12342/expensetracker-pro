@@ -1,0 +1,41 @@
+{
+  "name": "aws-expense-tracker",
+  "version": "1.0.0",
+  "description": "A comprehensive expense tracking application with AI-powered categorization and personalized savings recommendations",
+  "main": "index.js",
+  "scripts": {
+    "setup": "./setup.sh",
+    "install-frontend": "cd react-app && npm install",
+    "install-backend": "cd server && pip install -r requirements.txt",
+    "dev": "concurrently \"npm run dev-backend\" \"npm run dev-frontend\"",
+    "dev-frontend": "cd react-app && npm run dev",
+    "dev-backend": "cd server && python app.py",
+    "build": "cd react-app && npm run build",
+    "start": "npm run dev",
+    "test": "echo \"Tests coming soon!\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sparsh12342/AWSExpenseTracker.git"
+  },
+  "keywords": [
+    "expense-tracker",
+    "machine-learning",
+    "financial-analysis",
+    "react",
+    "python",
+    "flask",
+    "ai",
+    "categorization",
+    "savings"
+  ],
+  "author": "Sparsh",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Sparsh12342/AWSExpenseTracker/issues"
+  },
+  "homepage": "https://github.com/Sparsh12342/AWSExpenseTracker#readme",
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  }
+}

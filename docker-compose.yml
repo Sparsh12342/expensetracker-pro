@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./react-app
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:5050
+    depends_on:
+      - backend
+    volumes:
+      - ./react-app:/app
+      - /app/node_modules
+
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "5050:5050"
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=True
+    volumes:
+      - ./server:/app
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:

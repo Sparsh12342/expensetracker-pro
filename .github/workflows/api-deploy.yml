@@ -1,0 +1,33 @@
+name: API Deploy
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "server/**"
+      - ".github/workflows/api-deploy.yml"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # quick smoke: ensure the server directory exists in repo
+      - name: Verify server dir
+        run: test -d server
+
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          port: ${{ secrets.EC2_PORT || 22 }}
+          script: |
+            set -euo pipefail
+            # ensure repo exists (first-time on a fresh instance)
+            if [ ! -d /home/ubuntu/AWSExpenseTracker/.git ]; then
+              git clone https://github.com/<YOUR_USER>/<YOUR_REPO>.git /home/ubuntu/AWSExpenseTracker
+            fi
+            bash /home/ubuntu/AWSExpenseTracker/server/deploy.sh

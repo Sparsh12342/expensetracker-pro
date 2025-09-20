@@ -1,0 +1,19 @@
+{
+  "name": "electron-wrapper",
+  "version": "1.0.0",
+  "description": "Electron wrapper for Vite React app",
+  "main": "main.js",
+  "author": "Your Name",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dev": "concurrently \"cd ../react-app && npm run dev\" \"wait-on http://localhost:5173 && electron .\"",
+    "package": "electron-packager . react-expense-app --platform=darwin,win32 --arch=x64 --overwrite"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0",
+    "electron": "^28.1.0",
+    "wait-on": "^7.0.1",
+    "electron-packager": "^17.1.1"
+  }
+}
