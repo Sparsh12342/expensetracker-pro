@@ -23,7 +23,12 @@ except ImportError:
     from web_scraper import WebScraper
 
 app = Flask(__name__)
-CORS(app)  # allow localhost frontends (Electron/React)
+CORS(app, origins=["*"])  # Allow all origins for Vercel deployment
+
+# Health check endpoint for Vercel
+@app.route("/health")
+def health_check():
+    return jsonify({"status": "healthy", "message": "ExpenseTracker Pro API is running"})
 
 def summarize_by_category(df: pd.DataFrame, cat_col: str):
     # Ensure numeric amounts

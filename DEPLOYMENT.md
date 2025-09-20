@@ -1,28 +1,27 @@
 # 🚀 Deployment Guide - ExpenseTracker Pro
 
-This guide will help you deploy your ExpenseTracker Pro application to production.
+This guide will help you deploy your ExpenseTracker Pro application to production using Vercel.
 
 ## 📋 Overview
 
-The application consists of two parts:
-- **Frontend**: React + TypeScript (deploy to Vercel)
-- **Backend**: Python + Flask (deploy to Railway/Render)
+The application is configured for **monorepo deployment on Vercel**:
+- **Frontend**: React + TypeScript (Vercel Static Build)
+- **Backend**: Python + Flask (Vercel Serverless Functions)
 
-## 🎯 Step 1: Deploy Frontend to Vercel
+## 🎯 Deploy Both Frontend & Backend to Vercel
 
-### Option A: Deploy via Vercel Dashboard
+### Option A: Deploy via Vercel Dashboard (Recommended)
 
-1. **Go to [vercel.com](https://vercel.com)** and sign in
+1. **Go to [vercel.com](https://vercel.com)** and sign in with GitHub
 2. **Click "New Project"**
 3. **Import your repository**: `https://github.com/Sparsh12342/expensetracker-pro`
-4. **Configure the project**:
-   - **Framework Preset**: Vite
-   - **Root Directory**: `react-app`
-   - **Build Command**: `npm run build`
-   - **Output Directory**: `dist`
-5. **Set Environment Variables**:
-   - `VITE_API_URL`: Your backend URL (set after backend deployment)
-6. **Click "Deploy"**
+4. **Vercel will automatically detect both applications**:
+   - **Frontend**: React app in `react-app/` directory
+   - **Backend**: Python Flask app in `server/` directory
+5. **Configure Project** (if needed):
+   - **Framework Preset**: Vite (for frontend)
+   - **Root Directory**: Leave as root (for monorepo)
+6. **Click "Deploy"** - Vercel will build and deploy both apps!
 
 ### Option B: Deploy via Vercel CLI
 
@@ -30,80 +29,43 @@ The application consists of two parts:
 # Install Vercel CLI
 npm i -g vercel
 
-# Navigate to frontend directory
-cd react-app
+# Navigate to project root
+cd /path/to/expensetracker-pro
 
 # Login to Vercel
 vercel login
 
-# Deploy
+# Deploy the entire project
 vercel
 
-# Set environment variable
-vercel env add VITE_API_URL production
+# Follow the prompts:
+# - Set up and deploy? Y
+# - Which scope? (your account)
+# - Link to existing project? N
+# - Project name: expensetracker-pro
+# - In which directory is your code located? ./
 ```
 
-## 🐍 Step 2: Deploy Backend to Railway
+## ✅ Automatic Configuration
 
-### Option A: Deploy to Railway (Recommended)
+The application is pre-configured for Vercel deployment:
 
-1. **Go to [railway.app](https://railway.app)** and sign in
-2. **Click "New Project"** → **"Deploy from GitHub repo"**
-3. **Select your repository**: `Sparsh12342/expensetracker-pro`
-4. **Configure deployment**:
-   - **Root Directory**: `server`
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `python app.py`
-5. **Set Environment Variables**:
-   - `FLASK_ENV`: `production`
-   - `FLASK_DEBUG`: `False`
-6. **Deploy**
-
-### Option B: Deploy to Render
-
-1. **Go to [render.com](https://render.com)** and sign in
-2. **Click "New"** → **"Web Service"**
-3. **Connect your GitHub repository**
-4. **Configure**:
-   - **Name**: `expensetracker-pro-backend`
-   - **Root Directory**: `server`
-   - **Environment**: `Python 3`
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `python app.py`
-5. **Deploy**
-
-## 🔧 Step 3: Update Frontend API URL
-
-After your backend is deployed:
-
-1. **Copy your backend URL** (e.g., `https://your-app.railway.app`)
-2. **Go to your Vercel dashboard**
-3. **Navigate to your project** → **Settings** → **Environment Variables**
-4. **Update `VITE_API_URL`** with your backend URL
-5. **Redeploy** your frontend
-
-## 🐳 Alternative: Deploy with Docker
-
-### Frontend (Vercel)
-Vercel automatically detects and builds from the `Dockerfile` in the `react-app` directory.
-
-### Backend (Railway/Render)
-Both Railway and Render support Docker deployments. The `server/Dockerfile` is ready to use.
+- **Frontend** automatically serves from the root URL
+- **Backend API** automatically available at `/api/*` routes
+- **CORS** configured to allow frontend-backend communication
+- **Environment detection** handles local vs production automatically
 
 ## 📝 Environment Variables
 
-### Frontend (Vercel)
-- `VITE_API_URL`: Your backend API URL
-
-### Backend (Railway/Render)
-- `FLASK_ENV`: `production`
-- `FLASK_DEBUG`: `False`
-- `PORT`: Auto-set by platform
+No environment variables are required! The application automatically:
+- Uses `/api` for backend calls in production
+- Uses `http://localhost:5050` for local development
+- Configures CORS automatically
 
 ## 🔍 Testing Your Deployment
 
-1. **Check Frontend**: Visit your Vercel URL
-2. **Test API**: Visit `https://your-backend-url/health` (if available)
+1. **Check Frontend**: Visit your Vercel URL (e.g., `https://expensetracker-pro.vercel.app`)
+2. **Test API**: Visit `https://your-app.vercel.app/api/health`
 3. **Upload Sample Data**: Use the sample CSV to test functionality
 4. **Verify Features**: Test categorization, filtering, and recommendations
 
@@ -111,22 +73,23 @@ Both Railway and Render support Docker deployments. The `server/Dockerfile` is r
 
 ### Common Issues
 
-1. **CORS Errors**: Ensure backend allows your frontend domain
-2. **API Not Found**: Check that `VITE_API_URL` is set correctly
-3. **Build Failures**: Check that all dependencies are in `package.json`/`requirements.txt`
+1. **Build Failures**: Check that all dependencies are in `package.json`/`requirements.txt`
+2. **API Not Working**: Check Vercel function logs in the dashboard
+3. **CORS Errors**: Should be automatically handled by the configuration
 
 ### Debugging
 
-- **Frontend Logs**: Check Vercel deployment logs
-- **Backend Logs**: Check Railway/Render service logs
+- **Vercel Logs**: Check deployment logs in Vercel dashboard
+- **Function Logs**: Check serverless function logs for backend issues
 - **Network Tab**: Use browser dev tools to debug API calls
 
 ## 🎉 Success!
 
 Once deployed, your ExpenseTracker Pro will be live and accessible to users worldwide!
 
-**Frontend URL**: `https://your-app.vercel.app`
-**Backend URL**: `https://your-app.railway.app`
+**Application URL**: `https://your-app.vercel.app`
+- **Frontend**: Served from root
+- **Backend API**: Available at `/api/*` routes
 
 ## 📞 Support
 
