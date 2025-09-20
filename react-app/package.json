@@ -1,9 +1,14 @@
 {
-  "name": "react-app",
+  "name": "expensetracker-pro-frontend",
   "private": true,
   "proxy": "http://localhost:5050",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sparsh12342/expensetracker-pro.git"
+  },
+  "description": "AI-Powered Expense Tracker Frontend - Interactive analytics with dynamic visualizations",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

@@ -10,7 +10,7 @@ import SavingsAnalyzer from "./components/SavingsAnalyzer";
 import { categoryOptions } from "./constants";
 import { SummaryData, CategorySummary, PredRow } from "./types";
 
-const API = "http://localhost:5050";
+const API = import.meta.env.VITE_API_URL || "http://localhost:5050";
 
 // -------------------- helpers --------------------
 const formatCurrency = (n: number) =>
