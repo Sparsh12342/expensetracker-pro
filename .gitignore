@@ -170,6 +170,17 @@ jspm_packages/
 *.pt
 *.pth
 
+# Large binary files
+*.dmg
+*.app
+*.framework
+*.dylib
+
+# Electron build artifacts
+electron-app/react-expense-app-darwin-x64/
+electron-app/release/
+*.asar
+
 # Temporary files
 *.tmp
 *.temp
