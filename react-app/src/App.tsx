@@ -94,7 +94,7 @@ const extractMerchants = (
   const counts: Record<string, number> = {};
   const add = (s: string) => {
     // Improved regex to capture merchant names better
-    (s.toLowerCase().match(/[a-z][a-z&'.-]+/g) || []).forEach((w) => {
+    (s.toLowerCase().match(/[a-z][a-z&'.-]+/g) || []).forEach((w: string) => {
       if (w.length < 3) return;
       if (
         [

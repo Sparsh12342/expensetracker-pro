@@ -28,14 +28,14 @@ export type PredRow = {
 };
 
 export interface SummaryData {
-  total_deposits: number;
-  total_withdrawals: number;
-  num_deposits: number;
-  num_withdrawals: number;
-  deposits_grouped_by_first_word: FirstWordSummary[];
-  withdrawals_grouped_by_first_word: FirstWordSummary[];
-  deposits_grouped_by_cluster: DepositCluster[];
-  withdrawals_grouped_by_cluster: WithdrawalCluster[];
+  total_deposits?: number;
+  total_withdrawals?: number;
+  num_deposits?: number;
+  num_withdrawals?: number;
+  deposits_grouped_by_first_word?: FirstWordSummary[];
+  withdrawals_grouped_by_first_word?: FirstWordSummary[];
+  deposits_grouped_by_cluster?: DepositCluster[];
+  withdrawals_grouped_by_cluster?: WithdrawalCluster[];
   category_summary: CategorySummary[];   // server pie data
   entries_with_pred?: PredRow[];         // per-row predictions (optional)
 };
