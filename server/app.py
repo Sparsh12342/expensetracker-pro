@@ -12,9 +12,8 @@ try:
     from .machinelearningclassification import predict_categories
     from .spending_analyzer import SpendingAnalyzer
     from .web_scraper import WebScraper
-    # Temporarily disable BERT for faster Vercel deployment
-    # from .bert_refiner import refine_uncategorized_with_bert, get_bert_model_info
-    BERT_AVAILABLE = False
+    from .bert_refiner import refine_uncategorized_with_bert, get_bert_model_info
+    BERT_AVAILABLE = True
 except ImportError:
     # Fall back to absolute imports (when running directly)
     from nlp_refiner import predict_descriptions, learn_feedback, labels as nlp_labels
@@ -22,12 +21,11 @@ except ImportError:
     from machinelearningclassification import predict_categories
     from spending_analyzer import SpendingAnalyzer
     from web_scraper import WebScraper
-    # Temporarily disable BERT for faster Vercel deployment
-    # from bert_refiner import refine_uncategorized_with_bert, get_bert_model_info
-    BERT_AVAILABLE = False
+    from bert_refiner import refine_uncategorized_with_bert, get_bert_model_info
+    BERT_AVAILABLE = True
 
 app = Flask(__name__)
-CORS(app, origins=["*"])  # Allow all origins for Vercel deployment
+CORS(app, origins=["*"])  # Allow all origins for deployment
 
 # Health check endpoint for Vercel
 @app.route("/health")
