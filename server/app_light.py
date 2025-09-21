@@ -15,7 +15,14 @@ def health_check():
 # Root endpoint
 @app.route("/")
 def root():
-    return jsonify({"message": "ExpenseTracker Pro API", "endpoints": ["/health", "/upload-csv", "/api/categorize"]})
+    return jsonify({
+        "message": "ExpenseTracker Pro API", 
+        "endpoints": [
+            "/health", "/upload-csv", "/api/categorize", 
+            "/nlp/labels", "/nlp/refine", "/nlp/feedback", 
+            "/savings/suggestions"
+        ]
+    })
 
 def summarize_by_category(df: pd.DataFrame, cat_col: str):
     # Ensure numeric amounts
