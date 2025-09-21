@@ -36,6 +36,7 @@
   },
   "homepage": "https://github.com/Sparsh12342/AWSExpenseTracker#readme",
   "devDependencies": {
-    "concurrently": "^7.6.0"
+    "concurrently": "^7.6.0",
+    "typescript": "^5.0.0"
   }
 }
