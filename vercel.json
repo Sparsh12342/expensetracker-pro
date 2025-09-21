@@ -1,15 +1,13 @@
 {
   "version": 2,
-  "builds": [
+  "buildCommand": "cd react-app && npm install && npm run build",
+  "outputDirectory": "react-app/dist",
+  "installCommand": "cd react-app && npm install",
+  "framework": "vite",
+  "rewrites": [
     {
-      "src": "server/vercel.py",
-      "use": "@vercel/python"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "server/vercel.py"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }

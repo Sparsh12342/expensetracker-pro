@@ -1,14 +1,14 @@
-# Ignore everything except server
+# Ignore everything except react-app
 *
-!server/
-!server/**
+!react-app/
+!react-app/**
 !vercel.json
 !.vercelignore
 
-# Explicitly ignore other directories
+# Explicitly ignore large files and directories
 bert_expense_classifier/
 models/
-react-app/
+server/
 electron-app/
 *.joblib
 *.pkl
@@ -17,7 +17,5 @@ electron-app/
 *.safetensors
 *.csv
 *.xlsx
-venv/
-__pycache__/
 *.mov
 *.mp4
