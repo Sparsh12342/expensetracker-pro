@@ -2,7 +2,6 @@
 *
 !react-app/
 !react-app/**
-!package.json
 !vercel.json
 !.vercelignore
 
