@@ -109,4 +109,13 @@ def categorize_transactions():
         return jsonify({"error": f"Error categorizing transactions: {str(e)}"}), 500
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    print("🏦 Starting Expense Tracker Backend Server...")
+    print("📍 Server will be available at: http://127.0.0.1:5050")
+    print("🔗 Health check: http://127.0.0.1:5050/health")
+    print("=" * 50)
+    
+    app.run(
+        host="127.0.0.1",
+        port=5050,
+        debug=True
+    )
