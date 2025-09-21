@@ -10,17 +10,21 @@ try:
     from .nlp_refiner import predict_descriptions, learn_feedback, labels as nlp_labels
     from .savings import get_savings_suggestions
     from .machinelearningclassification import predict_categories
-    from .bert_refiner import refine_uncategorized_with_bert, get_bert_model_info
     from .spending_analyzer import SpendingAnalyzer
     from .web_scraper import WebScraper
+    # Temporarily disable BERT for faster Vercel deployment
+    # from .bert_refiner import refine_uncategorized_with_bert, get_bert_model_info
+    BERT_AVAILABLE = False
 except ImportError:
     # Fall back to absolute imports (when running directly)
     from nlp_refiner import predict_descriptions, learn_feedback, labels as nlp_labels
     from savings import get_savings_suggestions
     from machinelearningclassification import predict_categories
-    from bert_refiner import refine_uncategorized_with_bert, get_bert_model_info
     from spending_analyzer import SpendingAnalyzer
     from web_scraper import WebScraper
+    # Temporarily disable BERT for faster Vercel deployment
+    # from bert_refiner import refine_uncategorized_with_bert, get_bert_model_info
+    BERT_AVAILABLE = False
 
 app = Flask(__name__)
 CORS(app, origins=["*"])  # Allow all origins for Vercel deployment
@@ -57,7 +61,10 @@ def health():
 def bert_info():
     """Get information about the BERT model"""
     try:
-        info = get_bert_model_info()
+        if BERT_AVAILABLE:
+            info = get_bert_model_info()
+        else:
+            info = {"status": "BERT temporarily disabled for faster deployment"}
         return jsonify(info)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -97,7 +104,9 @@ def upload_csv():
 
     # Apply BERT refinement to uncategorized transactions
     print("🤖 Applying BERT refinement to uncategorized transactions...")
-    df = refine_uncategorized_with_bert(df, confidence_threshold=0.15)
+    if BERT_AVAILABLE:
+        df = refine_uncategorized_with_bert(df, confidence_threshold=0.15)
+    # Skip BERT refinement for faster deployment
 
     # Build ML-based summary
     category_summary = summarize_by_category(df, "PredictedCategory")
@@ -137,7 +146,9 @@ def nlp_refine():
     # Apply BERT refinement to remaining uncategorized transactions
     if below.any():
         print("🤖 Applying BERT refinement to low-confidence predictions...")
-        out = refine_uncategorized_with_bert(out, confidence_threshold=0.15)
+        if BERT_AVAILABLE:
+            out = refine_uncategorized_with_bert(out, confidence_threshold=0.15)
+        # Skip BERT refinement for faster deployment
 
     return jsonify(out.to_dict(orient="records"))
 
