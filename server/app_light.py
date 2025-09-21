@@ -140,6 +140,91 @@ def categorize_transactions():
     except Exception as e:
         return jsonify({"error": f"Error categorizing transactions: {str(e)}"}), 500
 
+# NLP endpoints for frontend compatibility
+@app.route("/nlp/labels", methods=["GET"])
+def nlp_get_labels():
+    """Return available category labels"""
+    labels = [
+        "Food & Dining", "Transportation", "Housing", "Entertainment", 
+        "Shopping", "Healthcare", "Utilities", "Insurance", "Education",
+        "Transfers", "Income", "Fees", "Travel", "Education", "Uncategorized"
+    ]
+    return jsonify({"labels": labels})
+
+@app.route("/nlp/refine", methods=["POST"])
+def nlp_refine():
+    """Refine uncategorized transactions with basic rules"""
+    try:
+        data = request.get_json()
+        rows = data.get("rows", [])
+        
+        refined = []
+        for row in rows:
+            description = str(row.get("Description", "")).lower()
+            amount = float(row.get("Amount", 0))
+            
+            # Simple rule-based categorization
+            if "grocery" in description or "food" in description or "restaurant" in description:
+                category = "Food & Dining"
+            elif "gas" in description or "fuel" in description or "gasoline" in description:
+                category = "Transportation"
+            elif "rent" in description or "mortgage" in description or "housing" in description:
+                category = "Housing"
+            elif "salary" in description or "payroll" in description or "income" in description:
+                category = "Income"
+            elif amount > 0:
+                category = "Income"
+            else:
+                category = "Other Expenses"
+            
+            refined.append({
+                **row,
+                "PredictedCategory": category
+            })
+        
+        return jsonify(refined)
+        
+    except Exception as e:
+        return jsonify({"error": f"Error refining transactions: {str(e)}"}), 500
+
+@app.route("/nlp/feedback", methods=["POST"])
+def nlp_feedback():
+    """Accept feedback for learning (simplified version)"""
+    try:
+        data = request.get_json()
+        # In a full implementation, this would update the ML model
+        # For now, just acknowledge receipt
+        return jsonify({"message": "Feedback received", "status": "success"})
+    except Exception as e:
+        return jsonify({"error": f"Error processing feedback: {str(e)}"}), 500
+
+@app.route("/savings/suggestions", methods=["POST"])
+def savings_suggestions():
+    """Generate savings suggestions (simplified version)"""
+    try:
+        data = request.get_json()
+        categories = data.get("categories", [])
+        merchants = data.get("merchants", [])
+        
+        # Generate basic savings suggestions
+        suggestions = []
+        
+        for category in categories[:3]:  # Limit to top 3 categories
+            suggestions.append({
+                "category": category,
+                "suggestion": f"Consider reducing {category} expenses by 10-15%",
+                "potential_savings": 50.0,
+                "confidence": 0.7
+            })
+        
+        return jsonify({
+            "suggestions": suggestions,
+            "total_potential_savings": sum(s["potential_savings"] for s in suggestions)
+        })
+        
+    except Exception as e:
+        return jsonify({"error": f"Error generating suggestions: {str(e)}"}), 500
+
 if __name__ == "__main__":
     print("🏦 Starting Expense Tracker Backend Server...")
     print("📍 Server will be available at: http://127.0.0.1:5050")
