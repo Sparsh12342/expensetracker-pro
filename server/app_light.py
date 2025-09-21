@@ -12,6 +12,11 @@ CORS(app, origins=["*"])  # Allow all origins for deployment
 def health_check():
     return jsonify({"status": "healthy", "message": "ExpenseTracker Pro API is running (Light Version)"})
 
+# Root endpoint
+@app.route("/")
+def root():
+    return jsonify({"message": "ExpenseTracker Pro API", "endpoints": ["/health", "/upload-csv", "/api/categorize"]})
+
 def summarize_by_category(df: pd.DataFrame, cat_col: str):
     # Ensure numeric amounts
     df["Amount"] = pd.to_numeric(df.get("Amount", 0), errors="coerce").fillna(0.0)
@@ -31,7 +36,7 @@ def summarize_by_category(df: pd.DataFrame, cat_col: str):
         })
     return out
 
-@app.route("/api/upload", methods=["POST"])
+@app.route("/upload-csv", methods=["POST"])
 def upload_csv():
     try:
         if "file" not in request.files:
