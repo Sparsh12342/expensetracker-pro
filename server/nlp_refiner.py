@@ -28,6 +28,13 @@ DEFAULT_LABELS = [
     "Income","Fees","Travel","Education","Uncategorized"
 ]
 
+def _featurize(desc: pd.Series, amt: pd.Series):
+    """Create features from description and amount."""
+    # This will be updated when _VECTORIZER is initialized
+    X_text = desc.fillna("").astype(str).values
+    X_amt = _amount_bucket(amt)
+    return X_text, X_amt
+
 def _amount_bucket(x: pd.Series) -> sparse.csr_matrix:
     # coarse bins for amount; model learns typical ranges per category
     v = pd.to_numeric(x, errors="coerce").fillna(0.0).values.reshape(-1, 1)
@@ -150,7 +157,9 @@ def _train_initial_model(vec, clf, labels):
     vec.fit(df["Description"].fillna("").astype(str).values)
     
     # Create features
-    X = _featurize(df["Description"], df["Amount"])
+    X_text, X_amt = _featurize(df["Description"], df["Amount"])
+    X_text_vec = vec.transform(X_text)
+    X = sparse.hstack([X_text_vec, X_amt], format="csr")
     y = df["Category"].values
     
     # Train classifier
@@ -163,11 +172,6 @@ def _train_initial_model(vec, clf, labels):
 
 _VECTORIZER, _CLF, _LABELS = _load_or_init()
 
-def _featurize(desc: pd.Series, amt: pd.Series):
-    X_text = _VECTORIZER.transform(desc.fillna("").astype(str).values)
-    X_amt = _amount_bucket(amt)
-    return sparse.hstack([X_text, X_amt], format="csr")
-
 def predict_descriptions(df: pd.DataFrame, return_conf=True) -> pd.DataFrame:
     """Return DataFrame with PredictedCategory (+confidence)."""
     global _VECTORIZER, _CLF, _LABELS
@@ -178,7 +182,9 @@ def predict_descriptions(df: pd.DataFrame, return_conf=True) -> pd.DataFrame:
     if len(getattr(_VECTORIZER, "vocabulary_", {})) == 0:
         _VECTORIZER.fit(desc.fillna("").astype(str).values)
 
-    X = _featurize(desc, amt)
+    X_text, X_amt = _featurize(desc, amt)
+    X_text_vec = _VECTORIZER.transform(X_text)
+    X = sparse.hstack([X_text_vec, X_amt], format="csr")
     preds = _CLF.predict(X)
 
     out = pd.DataFrame({"PredictedCategory": preds}, index=df.index)

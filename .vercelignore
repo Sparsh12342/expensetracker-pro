@@ -1,4 +1,12 @@
-# Ignore all Python files and directories
+# Ignore everything except react-app
+*
+!react-app/
+!react-app/**
+!package.json
+!vercel.json
+!.vercelignore
+
+# Explicitly ignore Python and backend files
 *.py
 server/
 bert_expense_classifier/
@@ -8,13 +16,10 @@ models/
 *.pt
 *.pth
 *.safetensors
-
-# Ignore other non-frontend files
-electron-app/
 *.csv
 *.xlsx
 venv/
 __pycache__/
-
-# Keep only react-app for frontend deployment
-!react-app/
+electron-app/
+*.mov
+*.mp4
