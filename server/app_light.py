@@ -45,8 +45,8 @@ def upload_csv():
             return jsonify({"error": "Please upload a CSV file"}), 400
         
         # Read CSV data
-        stream = io.StringIO(file.stream.read().decode("UTF8"), newline=None)
-        csv_input = csv.reader(stream)
+        csv_content = file.stream.read().decode("UTF8")
+        stream = io.StringIO(csv_content, newline=None)
         
         # Convert to DataFrame
         df = pd.read_csv(stream)
@@ -59,6 +59,27 @@ def upload_csv():
         if "Category" not in df.columns:
             df["Category"] = "Uncategorized"
         
+        # Add basic categorization logic
+        if "Description" in df.columns:
+            for idx, row in df.iterrows():
+                if df.loc[idx, "Category"] == "Uncategorized":
+                    description = str(row.get("Description", "")).lower()
+                    amount = float(row.get("Amount", 0))
+                    
+                    # Simple rule-based categorization
+                    if "grocery" in description or "food" in description or "restaurant" in description:
+                        df.loc[idx, "Category"] = "Food & Dining"
+                    elif "gas" in description or "fuel" in description or "gasoline" in description:
+                        df.loc[idx, "Category"] = "Transportation"
+                    elif "rent" in description or "mortgage" in description or "housing" in description:
+                        df.loc[idx, "Category"] = "Housing"
+                    elif "salary" in description or "payroll" in description or "income" in description:
+                        df.loc[idx, "Category"] = "Income"
+                    elif amount > 0:
+                        df.loc[idx, "Category"] = "Income"
+                    else:
+                        df.loc[idx, "Category"] = "Other Expenses"
+        
         # Generate summary
         summary = {
             "total_deposits": float(df[df["Amount"] >= 0]["Amount"].sum()) if "Amount" in df.columns else 0.0,
@@ -66,7 +87,13 @@ def upload_csv():
             "num_deposits": int((df["Amount"] >= 0).sum()) if "Amount" in df.columns else 0,
             "num_withdrawals": int((df["Amount"] < 0).sum()) if "Amount" in df.columns else 0,
             "category_summary": summarize_by_category(df, "Category"),
-            "entries_with_pred": df.to_dict("records")
+            "entries_with_pred": [
+                {
+                    **row,
+                    "PredictedCategory": row.get("Category", "Uncategorized")
+                }
+                for row in df.to_dict("records")
+            ]
         }
         
         return jsonify(summary)
