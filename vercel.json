@@ -1,13 +1,15 @@
 {
   "version": 2,
-  "buildCommand": "cd react-app && npm install && npm run build",
-  "outputDirectory": "react-app/dist",
-  "installCommand": "cd react-app && npm install",
-  "framework": "vite",
-  "rewrites": [
+  "builds": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "src": "server/app_light.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "server/app_light.py"
     }
   ]
 }

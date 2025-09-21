@@ -1,15 +1,17 @@
-# Ignore everything except react-app
+# Ignore everything except server
 *
-!react-app/
-!react-app/**
+!server/
+!server/**
 !vercel.json
 !.vercelignore
 
 # Explicitly ignore large files and directories
 bert_expense_classifier/
 models/
-server/
+react-app/
 electron-app/
+server/venv/
+server/__pycache__/
 *.joblib
 *.pkl
 *.pt
