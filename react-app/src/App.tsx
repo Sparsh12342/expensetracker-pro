@@ -10,9 +10,8 @@ import SavingsAnalyzer from "./components/SavingsAnalyzer";
 import { categoryOptions } from "./constants";
 import { SummaryData, CategorySummary, PredRow } from "./types";
 
-// Auto-detect API URL based on environment
-const API = import.meta.env.VITE_API_URL || 
-  (import.meta.env.DEV ? "http://localhost:5050" : "/api");
+// For now, use localhost for development and a placeholder for production
+const API = import.meta.env.VITE_API_URL || "http://localhost:5050";
 
 // -------------------- helpers --------------------
 const formatCurrency = (n: number) =>
@@ -254,6 +253,7 @@ export default function App() {
   const [useML, setUseML] = useState(true);
 
   const [loading, setLoading] = useState(false);
+  const [backendAvailable, setBackendAvailable] = useState<boolean>(true);
   const [entries, setEntries] = useState<string[][]>([]);
   const [entry, setEntry] = useState({
     Date: "",
@@ -348,6 +348,10 @@ export default function App() {
       });
 
       if (!res.ok) {
+        if (res.status === 0 || res.status >= 500) {
+          setBackendAvailable(false);
+          throw new Error("Backend server is not available. Please run the backend locally or deploy it separately.");
+        }
         throw new Error(`HTTP error! status: ${res.status}`);
       }
 
@@ -933,6 +937,29 @@ export default function App() {
       >
         🏦 Spending Summary
       </h1>
+      
+      {!backendAvailable && (
+        <div
+          style={{
+            backgroundColor: "#fff3cd",
+            border: "1px solid #ffeaa7",
+            color: "#856404",
+            padding: "12px",
+            borderRadius: "8px",
+            margin: "0 auto 20px",
+            maxWidth: "600px",
+            textAlign: "center",
+          }}
+        >
+          <strong>⚠️ Backend Not Available</strong>
+          <br />
+          <small>
+            The AI-powered backend is not running. You can still use basic features like manual entry and CSV upload with local categorization.
+            <br />
+            To enable full AI features, run the backend locally or deploy it separately.
+          </small>
+        </div>
+      )}
 
       {/* ML toggle */}
       <div
