@@ -10,8 +10,12 @@ import SavingsAnalyzer from "./components/SavingsAnalyzer";
 import { categoryOptions } from "./constants";
 import { SummaryData, CategorySummary, PredRow } from "./types";
 
-// For now, use localhost for development and a placeholder for production
-const API = import.meta.env.VITE_API_URL || "http://localhost:5050";
+// Auto-detect API URL based on environment
+const API =
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.DEV
+    ? "http://localhost:5050"
+    : "https://your-app-name.railway.app");
 
 // -------------------- helpers --------------------
 const formatCurrency = (n: number) =>
@@ -350,7 +354,9 @@ export default function App() {
       if (!res.ok) {
         if (res.status === 0 || res.status >= 500) {
           setBackendAvailable(false);
-          throw new Error("Backend server is not available. Please run the backend locally or deploy it separately.");
+          throw new Error(
+            "Backend server is not available. Please run the backend locally or deploy it separately."
+          );
         }
         throw new Error(`HTTP error! status: ${res.status}`);
       }
@@ -937,7 +943,7 @@ export default function App() {
       >
         🏦 Spending Summary
       </h1>
-      
+
       {!backendAvailable && (
         <div
           style={{
@@ -954,9 +960,11 @@ export default function App() {
           <strong>⚠️ Backend Not Available</strong>
           <br />
           <small>
-            The AI-powered backend is not running. You can still use basic features like manual entry and CSV upload with local categorization.
+            The AI-powered backend is not running. You can still use basic
+            features like manual entry and CSV upload with local categorization.
             <br />
-            To enable full AI features, run the backend locally or deploy it separately.
+            To enable full AI features, run the backend locally or deploy it
+            separately.
           </small>
         </div>
       )}

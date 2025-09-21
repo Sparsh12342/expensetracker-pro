@@ -1,0 +1,20 @@
+# Ignore all Python files and directories
+*.py
+server/
+bert_expense_classifier/
+models/
+*.joblib
+*.pkl
+*.pt
+*.pth
+*.safetensors
+
+# Ignore other non-frontend files
+electron-app/
+*.csv
+*.xlsx
+venv/
+__pycache__/
+
+# Keep only react-app for frontend deployment
+!react-app/
